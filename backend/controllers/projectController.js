@@ -1,4 +1,5 @@
 const Project = require('../models/Project');
+const hashIp = require('../utils/hashIp');
 
 // @desc    Create a project
 // @route   POST /api/projects
@@ -183,10 +184,81 @@ const deleteProject = async (req, res) => {
   }
 };
 
+// @desc    Rate a project
+// @route   POST /api/projects/:id/rate
+// @access  Public
+const rateProject = async (req, res) => {
+  try {
+    const { score } = req.body;
+    
+    // Validate score
+    if (!score || score < 1 || score > 10) {
+      return res.status(400).json({ message: 'Score must be between 1 and 10' });
+    }
+
+    const project = await Project.findById(req.params.id);
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    let myScore = null;
+    let isNewRating = false;
+
+    if (req.user) {
+      // Authenticated user rating
+      const existingRatingIndex = project.userRatings.findIndex(
+        rating => rating.userId.toString() === req.user._id.toString()
+      );
+
+      if (existingRatingIndex !== -1) {
+        // Update existing rating
+        const oldScore = project.userRatings[existingRatingIndex].score;
+        project.ratingSum = project.ratingSum - oldScore + score;
+        project.userRatings[existingRatingIndex].score = score;
+        myScore = score;
+      } else {
+        // New rating
+        project.userRatings.push({ userId: req.user._id, score });
+        project.ratingCount += 1;
+        project.ratingSum += score;
+        project.voterUserIds.push(req.user._id);
+        myScore = score;
+        isNewRating = true;
+      }
+    } else {
+      // Guest user rating
+      const ipHash = hashIp(req.ip);
+      
+      if (project.voterIpHashes.includes(ipHash)) {
+        return res.status(400).json({ message: 'Guest users can only rate once per project' });
+      }
+
+      project.voterIpHashes.push(ipHash);
+      project.ratingCount += 1;
+      project.ratingSum += score;
+      myScore = score;
+      isNewRating = true;
+    }
+
+    await project.save();
+
+    const average = project.ratingCount > 0 ? (project.ratingSum / project.ratingCount).toFixed(1) : 0;
+
+    res.json({
+      average: parseFloat(average),
+      count: project.ratingCount,
+      myScore
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 module.exports = {
   createProject,
   getProjects,
   getProject,
   updateProject,
-  deleteProject
+  deleteProject,
+  rateProject
 };

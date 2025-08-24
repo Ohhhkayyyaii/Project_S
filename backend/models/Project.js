@@ -47,6 +47,17 @@ const projectSchema = new mongoose.Schema({
   }],
   voterIpHashes: [{
     type: String
+  }],
+  userRatings: [{
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    score: {
+      type: Number,
+      min: 1,
+      max: 10
+    }
   }]
 }, { timestamps: true });
 

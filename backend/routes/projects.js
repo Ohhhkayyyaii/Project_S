@@ -5,7 +5,8 @@ const {
   getProjects, 
   getProject, 
   updateProject, 
-  deleteProject 
+  deleteProject,
+  rateProject
 } = require('../controllers/projectController');
 const auth = require('../middleware/auth');
 const ownerGuard = require('../middleware/ownerGuard');
@@ -13,6 +14,7 @@ const ownerGuard = require('../middleware/ownerGuard');
 // Public routes
 router.get('/', getProjects);
 router.get('/:id', getProject);
+router.post('/:id/rate', rateProject);
 
 // Protected routes (require authentication)
 router.post('/', auth, createProject);
