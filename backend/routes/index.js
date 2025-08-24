@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-// Import auth routes
+// Import routes
 const authRoutes = require('./auth');
+const projectRoutes = require('./projects');
 
-// Mount auth routes
+// Mount routes
 router.use('/auth', authRoutes);
+router.use('/projects', projectRoutes);
 
 // Basic route for testing
 router.get('/', (req, res) => {
