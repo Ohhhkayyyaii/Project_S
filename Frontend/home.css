@@ -195,7 +195,7 @@ a {
 .main-wrap .showcase .head {
     padding: 20px;
     display:flex;
-    justify-content: space-between;
+    justify-content: right;
     
 }
 .main-wrap .showcase .head h1{
