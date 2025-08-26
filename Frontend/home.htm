@@ -78,7 +78,7 @@
         <section class="showcase">
 
             <div class="head">
-                <h1>Projects</h1>
+                <!-- <h1>Projects</h1> -->
                 <div class="buttons">
                     <button class="login">LOGIN</button>
                     <button class="create-account">CREATE ACCOUNT</button>
@@ -148,43 +148,28 @@
 
 
                     </div>
-                </div>
-            </div>
-
-            <button class="view-project-btn" data-action="view-details" data-project-id="{{project.id}}"
-                onclick="window.location.href='https://flora-restaurant-1998.netlify.app/'">
-                View
-            </button>
-        </div>
-        <div class="block" data-project-id="{{project.id}}">
-            <div class="card-content">
-                <!-- <div class="image" data-field="image_url" style="background-image: url('./images/4.web.png');">
-                        </div> -->
-
-                <div class="grid-content">
-                    <div class="title-content" data-field="title">{{project.title}}</div>
-
-                    <div class="user-info">
-                        <div class="user-img" data-field="user_avatar"
-                            style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALsAAACUCAMAAAD8tKi7AAAAM1BMVEXk5ueutLeor7LV2Nrn6eqrsbXq7O22u77a3d7h4+TKztDHy83CxsmzuLvR1NalrLC8wcPnKtRzAAAEoUlEQVR4nO2c23KtIAxAFcIdkf//2oPu3dbu7lYu0eAc11On04fVTAwIicNwc3Nzc3PzXwBSgtEhwfXyM7VPPoY7xeaZrcyzUE6b9P9Qa+0Bgw5+ZGL8BptHH0zf9iC5n8SL+AMhlNfQr73UcXwr/tQfo5bUju+Bwf9l/gi+7zLywAX72/xhr7uzB+MyzFd7Z/qyBx130mUjHw217hbQU7Z6kp86yhvQBeYLrJu0AT2XqafQdxL54qivaGrthZTrFepC9fDAmvwK800+0mcN5Nb1V5ij3h8AL35OP5g5beRhqEqYBxOp+iB9g7twlIEHXm++BJ4ya6CuxnwG3hOqh6awJzidfFvYSQOvW8OeNmVE6uAaw065QDWHPWUNjTvwyt3AFkZTJmXrk7oSSQIvEcKeoFAfNI47RYmXFiNlxpFiUyMVijrJOwigqNOc1hgc91ERvHXzmlfsNxAcNLXvIT8I57vbC7s7JHVhT3eX/rrucLsv7merXzpn5IWf1UvXyAuvTXh7AoK3Pry92PnuV94DX/ndA6vAkxxk47xrTyTHqVc+47jy2RIEjDM9gpVpwSDEfSY6B4aWi7IHwlOdYfP283eym/nK6/hN2COVevteUhDelRnVdkdJ2X0FoS1pSDsKmtYn4mZJaKrxxF1jYKsX15loSd0QK+UFzU5mC1TWGqGozYflmrXqpXvqo1GvamtAuCptgVDe20n/nD6RtlC+gxLzSWHvleDkJWYD8PxqIyhu9v4CdG6dZ76TPuYvYLDvB2xegs54j6NCoNVu6FkXLcxvAMl/GW56xnxUvc4IJQBs/HU2a4yh49msYUl7bqN4nYlLv1Cuy0T/DgxGBz8to4gisQwjTjHozqf5tiwzidY5ZwPXi/VlxJfE/w61Tw6rpzFGa80/SD+n3wxd/wuwjgpb531UaprW2rI+s5NSKnpnbUof2V2RBClNqi/JcRX+USXF85fL/8AN9DMDnVS4e4R5b1ld/2Qp9EMH+slAWzW/1vM9lhlobii3BwApURSrOycQbPRBE9VOSJny54jzvr6YfDDnZ48cQsxJ8D39UTlzbumBAasDZYn+iRPoafHxM04v8JNZ8VOOJgG0G3FuVjewGI63B+MmdPNxzRx+7J4hvVuUDGaX2U/xyKdW6rY7mj378bDWsVRcquc9M2EHNQIB3z8GaEfYI3YKtmkNzZeP2KGH5tG9fPkR97QSsBrbsmCorUyN16jF8hFvoUJrQc1FYMkjjEuWyysU+aZx8nr5CeG1BKHBp1K+PfIECfOUb00bvE7xCvm2DpXG7w+0yrf1eZyzD/gNZutXWInU4l4vX90cRFViNkyVKU+b7A9qP77Q2MiGRF3PBNJMcyNVl5pVX6/Ch7lydZwOcQTm4sBXfO/sIMr7ymQXD+qKKNzX1H2r7SAK+8xlpBbeUNgWV/WducMoOi6j3Pr+pGwzbOh3MltKPmEAGmfeDQsWClKmfZADlaKkqf024WHkuzfPoGAz51fJU08fcyhIeNPLXuYDkb+ZxPj4Fi4qe1tQPwdxGNnu/vnJ/H6Ysxenr36pbshV/9mqRk+++83NTW/8A+01RORg7LJmAAAAAElFTkSuQmCC');">
-                        </div>
-                        <div class="user-name" data-field="username">{{project.username}}</div>
-                    </div>
-
-                    <div class="about" data-field="description">{{project.description}}</div>
-
-                    <div class="like-views">
-                        <div class="likes" data-field="likes_count" data-project-id="{{project.id}}">
-                            <i class="far fa-heart like-icon"></i>
-                            <span class="likes-count">{{project.likes_count}}</span>
+                     <div class="rating-container" data-project-id="{{project.id}}">
+                        <div class="current-rating" data-field="rating">
+                            <i class="fas fa-star rating-icon"></i>
+                            <span class="rating-value">{{project.average_rating}}</span>
+                            <span class="rating-count">({{project.rating_count}})</span>
                         </div>
 
-                        <div class="views" data-field="views_count" data-project-id="{{project.id}}">
-                            <i class="far fa-eye view-icon"></i>
-                            <span class="views-count">{{project.views_count}}</span>
+                        <div class="rating-popup">
+                            <div class="rating-options">
+                                <span class="rating-option" data-value="1">1</span>
+                                <span class="rating-option" data-value="2">2</span>
+                                <span class="rating-option" data-value="3">3</span>
+                                <span class="rating-option" data-value="4">4</span>
+                                <span class="rating-option" data-value="5">5</span>
+                                <span class="rating-option" data-value="6">6</span>
+                                <span class="rating-option" data-value="7">7</span>
+                                <span class="rating-option" data-value="8">8</span>
+                                <span class="rating-option" data-value="9">9</span>
+                                <span class="rating-option" data-value="10">10</span>
+                            </div>
+                            <div class="rating-label">Rate this project</div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -224,6 +209,29 @@
 
 
                     </div>
+                    <div class="rating-container" data-project-id="{{project.id}}">
+                        <div class="current-rating" data-field="rating">
+                            <i class="fas fa-star rating-icon"></i>
+                            <span class="rating-value">{{project.average_rating}}</span>
+                            <span class="rating-count">({{project.rating_count}})</span>
+                        </div>
+
+                        <div class="rating-popup">
+                            <div class="rating-options">
+                                <span class="rating-option" data-value="1">1</span>
+                                <span class="rating-option" data-value="2">2</span>
+                                <span class="rating-option" data-value="3">3</span>
+                                <span class="rating-option" data-value="4">4</span>
+                                <span class="rating-option" data-value="5">5</span>
+                                <span class="rating-option" data-value="6">6</span>
+                                <span class="rating-option" data-value="7">7</span>
+                                <span class="rating-option" data-value="8">8</span>
+                                <span class="rating-option" data-value="9">9</span>
+                                <span class="rating-option" data-value="10">10</span>
+                            </div>
+                            <div class="rating-label">Rate this project</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -259,8 +267,94 @@
                             <i class="far fa-eye view-icon"></i>
                             <span class="views-count">{{project.views_count}}</span>
                         </div>
+                        
 
 
+                    </div>
+                     <div class="rating-container" data-project-id="{{project.id}}">
+                        <div class="current-rating" data-field="rating">
+                            <i class="fas fa-star rating-icon"></i>
+                            <span class="rating-value">{{project.average_rating}}</span>
+                            <span class="rating-count">({{project.rating_count}})</span>
+                        </div>
+
+                        <div class="rating-popup">
+                            <div class="rating-options">
+                                <span class="rating-option" data-value="1">1</span>
+                                <span class="rating-option" data-value="2">2</span>
+                                <span class="rating-option" data-value="3">3</span>
+                                <span class="rating-option" data-value="4">4</span>
+                                <span class="rating-option" data-value="5">5</span>
+                                <span class="rating-option" data-value="6">6</span>
+                                <span class="rating-option" data-value="7">7</span>
+                                <span class="rating-option" data-value="8">8</span>
+                                <span class="rating-option" data-value="9">9</span>
+                                <span class="rating-option" data-value="10">10</span>
+                            </div>
+                            <div class="rating-label">Rate this project</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <button class="view-project-btn" data-action="view-details" data-project-id="{{project.id}}"
+                onclick="window.location.href='https://flora-restaurant-1998.netlify.app/'">
+                View
+            </button>
+        </div>
+        <div class="block" data-project-id="{{project.id}}">
+            <div class="card-content">
+                <!-- <div class="image" data-field="image_url" style="background-image: url('./images/4.web.png');">
+                        </div> -->
+
+                <div class="grid-content">
+                    <div class="title-content" data-field="title">{{project.title}}</div>
+
+                    <div class="user-info">
+                        <div class="user-img" data-field="user_avatar"
+                            style="background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALsAAACUCAMAAAD8tKi7AAAAM1BMVEXk5ueutLeor7LV2Nrn6eqrsbXq7O22u77a3d7h4+TKztDHy83CxsmzuLvR1NalrLC8wcPnKtRzAAAEoUlEQVR4nO2c23KtIAxAFcIdkf//2oPu3dbu7lYu0eAc11On04fVTAwIicNwc3Nzc3PzXwBSgtEhwfXyM7VPPoY7xeaZrcyzUE6b9P9Qa+0Bgw5+ZGL8BptHH0zf9iC5n8SL+AMhlNfQr73UcXwr/tQfo5bUju+Bwf9l/gi+7zLywAX72/xhr7uzB+MyzFd7Z/qyBx130mUjHw217hbQU7Z6kp86yhvQBeYLrJu0AT2XqafQdxL54qivaGrthZTrFepC9fDAmvwK800+0mcN5Nb1V5ij3h8AL35OP5g5beRhqEqYBxOp+iB9g7twlIEHXm++BJ4ya6CuxnwG3hOqh6awJzidfFvYSQOvW8OeNmVE6uAaw065QDWHPWUNjTvwyt3AFkZTJmXrk7oSSQIvEcKeoFAfNI47RYmXFiNlxpFiUyMVijrJOwigqNOc1hgc91ERvHXzmlfsNxAcNLXvIT8I57vbC7s7JHVhT3eX/rrucLsv7merXzpn5IWf1UvXyAuvTXh7AoK3Pry92PnuV94DX/ndA6vAkxxk47xrTyTHqVc+47jy2RIEjDM9gpVpwSDEfSY6B4aWi7IHwlOdYfP283eym/nK6/hN2COVevteUhDelRnVdkdJ2X0FoS1pSDsKmtYn4mZJaKrxxF1jYKsX15loSd0QK+UFzU5mC1TWGqGozYflmrXqpXvqo1GvamtAuCptgVDe20n/nD6RtlC+gxLzSWHvleDkJWYD8PxqIyhu9v4CdG6dZ76TPuYvYLDvB2xegs54j6NCoNVu6FkXLcxvAMl/GW56xnxUvc4IJQBs/HU2a4yh49msYUl7bqN4nYlLv1Cuy0T/DgxGBz8to4gisQwjTjHozqf5tiwzidY5ZwPXi/VlxJfE/w61Tw6rpzFGa80/SD+n3wxd/wuwjgpb531UaprW2rI+s5NSKnpnbUof2V2RBClNqi/JcRX+USXF85fL/8AN9DMDnVS4e4R5b1ld/2Qp9EMH+slAWzW/1vM9lhlobii3BwApURSrOycQbPRBE9VOSJny54jzvr6YfDDnZ48cQsxJ8D39UTlzbumBAasDZYn+iRPoafHxM04v8JNZ8VOOJgG0G3FuVjewGI63B+MmdPNxzRx+7J4hvVuUDGaX2U/xyKdW6rY7mj378bDWsVRcquc9M2EHNQIB3z8GaEfYI3YKtmkNzZeP2KGH5tG9fPkR97QSsBrbsmCorUyN16jF8hFvoUJrQc1FYMkjjEuWyysU+aZx8nr5CeG1BKHBp1K+PfIECfOUb00bvE7xCvm2DpXG7w+0yrf1eZyzD/gNZutXWInU4l4vX90cRFViNkyVKU+b7A9qP77Q2MiGRF3PBNJMcyNVl5pVX6/Ch7lydZwOcQTm4sBXfO/sIMr7ymQXD+qKKNzX1H2r7SAK+8xlpBbeUNgWV/WducMoOi6j3Pr+pGwzbOh3MltKPmEAGmfeDQsWClKmfZADlaKkqf024WHkuzfPoGAz51fJU08fcyhIeNPLXuYDkb+ZxPj4Fi4qe1tQPwdxGNnu/vnJ/H6Ysxenr36pbshV/9mqRk+++83NTW/8A+01RORg7LJmAAAAAElFTkSuQmCC');">
+                        </div>
+                        <div class="user-name" data-field="username">{{project.username}}</div>
+                    </div>
+
+                    <div class="about" data-field="description">{{project.description}}</div>
+
+                    <div class="like-views">
+                        <div class="likes" data-field="likes_count" data-project-id="{{project.id}}">
+                            <i class="far fa-heart like-icon"></i>
+                            <span class="likes-count">{{project.likes_count}}</span>
+                        </div>
+
+                        <div class="views" data-field="views_count" data-project-id="{{project.id}}">
+                            <i class="far fa-eye view-icon"></i>
+                            <span class="views-count">{{project.views_count}}</span>
+                        </div>
+
+
+                    </div>
+                     <div class="rating-container" data-project-id="{{project.id}}">
+                        <div class="current-rating" data-field="rating">
+                            <i class="fas fa-star rating-icon"></i>
+                            <span class="rating-value">{{project.average_rating}}</span>
+                            <span class="rating-count">({{project.rating_count}})</span>
+                        </div>
+
+                        <div class="rating-popup">
+                            <div class="rating-options">
+                                <span class="rating-option" data-value="1">1</span>
+                                <span class="rating-option" data-value="2">2</span>
+                                <span class="rating-option" data-value="3">3</span>
+                                <span class="rating-option" data-value="4">4</span>
+                                <span class="rating-option" data-value="5">5</span>
+                                <span class="rating-option" data-value="6">6</span>
+                                <span class="rating-option" data-value="7">7</span>
+                                <span class="rating-option" data-value="8">8</span>
+                                <span class="rating-option" data-value="9">9</span>
+                                <span class="rating-option" data-value="10">10</span>
+                            </div>
+                            <div class="rating-label">Rate this project</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -271,7 +365,7 @@
             </button>
         </div>
     </div>
-    
+
     <div class="explore">
         <button class="explore-btn">EXPLORE ></button>
     </div>
