@@ -1,4 +1,35 @@
 document.addEventListener('DOMContentLoaded', function () {
+  const preloader = document.getElementById('preloader');
+  const MIN_DISPLAY_TIME = 700; // 1.5 seconds
+  const HIDE_DELAY = 500; // Matches your CSS transition time
+  const start = Date.now();
+
+  function hidePreloader() {
+    const elapsed = Date.now() - start;
+    const remainingTime = Math.max(0, MIN_DISPLAY_TIME - elapsed);
+
+    setTimeout(() => {
+      preloader.classList.add('hidden');
+
+      // Remove from DOM after animation completes
+      setTimeout(() => {
+        preloader.style.display = 'none';
+      }, HIDE_DELAY);
+    }, remainingTime);
+  }
+
+  if (document.readyState === 'complete') {
+    hidePreloader();
+  } else {
+    window.addEventListener('load', hidePreloader);
+
+    // Optional: Hide after max timeout (failsafe)
+    setTimeout(hidePreloader, 4000);
+  }
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
 
     // Get the toggle button and main header elements
     const container = document.querySelector('.container');
