@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const toggler = document.querySelector('.toggler');
     const mainHeader = document.querySelector('.main-header');
     const showcase = document.querySelector('.showcase');
+    const cardcontent = document.querySelector('.card-content');
+    const blockbox = document.querySelector('.block-box');
 
     // Add click event listener to the toggle button
     toggler.addEventListener('click', function () {
@@ -50,6 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
         projectHeading.classList.toggle('active');
         explore.classList.toggle('active');
         footer.classList.toggle('active');
+        cardcontent.classList.toggle('active');
+        blockbox.classList.toggle('active');
 
         // Change the icon based on the state
         const icon = toggler.querySelector('i');
@@ -75,6 +79,8 @@ document.addEventListener('DOMContentLoaded', function () {
             projectHeading.classList.remove('active');
             explore.classList.remove('active');
             footer.classList.remove('active');
+                    blockbox.classList.toggle('active');
+
 
             const icon = toggler.querySelector('i');
             icon.classList.remove('fa-times');
@@ -94,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 projectHeading.classList.remove('active');
                 explore.classList.remove('active');
                 footer.classList.remove('active');
+        cardcontent.classList.toggle('active');
 
                 const icon = toggler.querySelector('i');
                 icon.classList.remove('fa-times');
