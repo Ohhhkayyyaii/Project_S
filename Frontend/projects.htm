@@ -10,6 +10,13 @@
 </head>
 
 <body>
+        <div id="preloader">
+        <div class="preloader-content">
+            <div class="spinner"></div>
+            <p>Loading awesome projects...</p>
+        </div>
+    </div>
+
     <main class="main-wrap">
         <header class="main-header">
             <div class="main-nav">
@@ -34,27 +41,27 @@
                         </div>
                         <ul class="nav-list">
                             <li class="nav-list-item">
-                                <a href="#" class="nav-link">
+                                <a href="./home.htm" class="nav-link">
                                     <i class="fa-solid fa-house"></i>
                                     <span class="link-text">Home</span>
                                 </a>
                             </li>
                             <li class="nav-list-item">
-                                <a href="#" class="nav-link">
+                                <a href="./projects.htm" class="nav-link">
                                     <i class="fa-solid fa-diagram-project"></i>
                                     <span class="link-text">Projects</span>
                                 </a>
                             </li>
                             <li class="nav-list-item">
-                                <a href="#" class="nav-link">
+                                <a href="./login.htm" class="nav-link">
                                     <i class="fa-solid fa-right-to-bracket"></i>
                                     <span class="link-text">Login</span>
                                 </a>
                             </li>
                             <li class="nav-list-item">
-                                <a href="#" class="nav-link">
+                                <a href="./signup.htm" class="nav-link">
                                     <i class="fa-solid fa-user-plus"></i>
-                                    <span class="link-text">Sign-In</span>
+                                    <span class="link-text">Sign-Up</span>
                                 </a>
                             </li>
                             <li class="nav-list-item">
@@ -108,6 +115,29 @@
 
                                
                             </div>
+                             <div class="rating-container" data-project-id="{{project.id}}">
+                        <div class="current-rating" data-field="rating">
+                            <i class="fas fa-star rating-icon"></i>
+                            <span class="rating-value">{{project.average_rating}}</span>
+                            <span class="rating-count">({{project.rating_count}})</span>
+                        </div>
+
+                        <div class="rating-popup">
+                            <div class="rating-options">
+                                <span class="rating-option" data-value="1">1</span>
+                                <span class="rating-option" data-value="2">2</span>
+                                <span class="rating-option" data-value="3">3</span>
+                                <span class="rating-option" data-value="4">4</span>
+                                <span class="rating-option" data-value="5">5</span>
+                                <span class="rating-option" data-value="6">6</span>
+                                <span class="rating-option" data-value="7">7</span>
+                                <span class="rating-option" data-value="8">8</span>
+                                <span class="rating-option" data-value="9">9</span>
+                                <span class="rating-option" data-value="10">10</span>
+                            </div>
+                            <div class="rating-label">Rate this project</div>
+                        </div>
+                    </div>
                         </div>
                     </div>
 
@@ -118,11 +148,31 @@
                 </div>
             </div>
             </div>
-            <footer>
-                <div class="footer"></div>
-            </footer>
+            
         </section>
     </main>
+    <footer>
+        <div class="footer">
+            <div class="content">
+                <p class="GDGC">GDGC,NITS</p>
+                <div style="font-family: Arial, sans-serif; font-size: 18px;" class="social-links">
+                    
+                    <a href="https://instagram.com/yourprofile" target="_blank"
+                    style="text-decoration: none; color: black; font-size:1.4rem ;margin-right: 15px; ">
+                    <i class="fab fa-instagram"></i> gdgc_nits
+                </a>
+                <a href="https://facebook.com/yourprofile" target="_blank"
+                    style="text-decoration: none; color:black;  font-size:1.4rem;margin-right: 15px; ">
+                    <i class="fab fa-facebook"></i> GDG-NIT Silchar
+                </a>
+            
+                    <a href="https://linkedin.com/in/yourprofile" target="_blank" style="text-decoration: none; color: black; font-size:1.4rem">
+                        <i class="fab fa-linkedin-in"></i> Google Developers Group On Campus, NIT Silchar
+                     </a>
+                </div>
+            </div>
+        </div>
+    </footer>
     <script src="projects.js"></script>
 </body>
 

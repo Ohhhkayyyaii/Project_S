@@ -1,4 +1,35 @@
 document.addEventListener('DOMContentLoaded', function () {
+  const preloader = document.getElementById('preloader');
+  const MIN_DISPLAY_TIME = 700; // 1.5 seconds
+  const HIDE_DELAY = 500; // Matches your CSS transition time
+  const start = Date.now();
+
+  function hidePreloader() {
+    const elapsed = Date.now() - start;
+    const remainingTime = Math.max(0, MIN_DISPLAY_TIME - elapsed);
+
+    setTimeout(() => {
+      preloader.classList.add('hidden');
+
+      // Remove from DOM after animation completes
+      setTimeout(() => {
+        preloader.style.display = 'none';
+      }, HIDE_DELAY);
+    }, remainingTime);
+  }
+
+  if (document.readyState === 'complete') {
+    hidePreloader();
+  } else {
+    window.addEventListener('load', hidePreloader);
+
+    // Optional: Hide after max timeout (failsafe)
+    setTimeout(hidePreloader, 4000);
+  }
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
 
     // Get the toggle button and main header elements
     const container = document.querySelector('.container');
@@ -216,3 +247,83 @@ document.addEventListener('DOMContentLoaded', function() {
   // Update each project's data
   projectIds.forEach(updateProjectData);
 });
+// Add to your existing JavaScript
+// API endpoint for ratings
+API_ENDPOINTS.RATE_PROJECT = '/api/projects/{id}/rate';
+
+// Rating functionality
+document.addEventListener('click', async function(e) {
+  // Handle rating option clicks
+  if (e.target.closest('.rating-option')) {
+    const ratingOption = e.target.closest('.rating-option');
+    const ratingValue = parseInt(ratingOption.dataset.value);
+    const ratingContainer = ratingOption.closest('.rating-container');
+    const projectId = ratingContainer.dataset.projectId;
+    
+    // Visual feedback
+    document.querySelectorAll('.rating-option').forEach(opt => {
+      opt.classList.remove('selected');
+    });
+    ratingOption.classList.add('selected');
+    
+    // Send rating to backend
+    try {
+      const response = await fetch(API_ENDPOINTS.RATE_PROJECT.replace('{id}', projectId), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': 'Bearer ' + authToken
+        },
+        body: JSON.stringify({ rating: ratingValue })
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        
+        // Update rating display
+        const ratingValueEl = ratingContainer.querySelector('.rating-value');
+        const ratingCountEl = ratingContainer.querySelector('.rating-count');
+        
+        ratingValueEl.textContent = result.average_rating;
+        ratingCountEl.textContent = `(${result.rating_count})`;
+        
+        // Show success feedback
+        ratingContainer.querySelector('.rating-icon').style.color = '#4caf50';
+        setTimeout(() => {
+          ratingContainer.querySelector('.rating-icon').style.color = '#fdbb2d';
+        }, 1000);
+      }
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+      ratingOption.classList.remove('selected');
+    }
+  }
+});
+
+// Close rating popup when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.rating-container')) {
+    document.querySelectorAll('.rating-popup').forEach(popup => {
+      popup.style.display = 'none';
+    });
+  }
+});
+
+// Initialize user's previous rating if any
+function initializeRatings() {
+  document.querySelectorAll('.rating-container').forEach(container => {
+    const projectId = container.dataset.projectId;
+    
+    // Check if user has already rated this project
+    const userRating = localStorage.getItem(`rating_${projectId}`);
+    if (userRating) {
+      const ratingOption = container.querySelector(`.rating-option[data-value="${userRating}"]`);
+      if (ratingOption) {
+        ratingOption.classList.add('selected');
+      }
+    }
+  });
+}
+
+// Call this on page load
+document.addEventListener('DOMContentLoaded', initializeRatings);
