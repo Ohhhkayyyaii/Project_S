@@ -407,3 +407,45 @@ function initializeRatings() {
 
 // Call this on page load
 document.addEventListener('DOMContentLoaded', initializeRatings);
+
+// Add event listeners for login and create account buttons
+document.addEventListener('DOMContentLoaded', function() {
+  // Login button
+  const loginBtn = document.querySelector('.login');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('Login button clicked');
+      window.location.href = './login.htm';
+    });
+  } else {
+    console.log('Login button not found');
+  }
+
+  // Create account button
+  const createAccountBtn = document.querySelector('.create-account');
+  if (createAccountBtn) {
+    createAccountBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('Create account button clicked');
+      window.location.href = './signup.htm';
+    });
+  } else {
+    console.log('Create account button not found');
+  }
+});
+
+// Alternative approach - use event delegation
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('login')) {
+    e.preventDefault();
+    console.log('Login button clicked (delegation)');
+    window.location.href = './login.htm';
+  }
+  
+  if (e.target.classList.contains('create-account')) {
+    e.preventDefault();
+    console.log('Create account button clicked (delegation)');
+    window.location.href = './signup.htm';
+  }
+});
