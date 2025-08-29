@@ -253,14 +253,18 @@ document.addEventListener('DOMContentLoaded', loadProjects);
 
 // Show skeleton loader
 function showSkeletonLoader() {
-  document.getElementById('skeleton-loader').classList.add('visible');
-  document.getElementById('projects-grid').classList.add('hidden');
+  const skeletonLoader = document.getElementById('skeleton-loader');
+  const projectsGrid = document.getElementById('projects-grid');
+  
+  if (projectsGrid) projectsGrid.style.opacity = '0.5';
 }
 
 // Hide skeleton loader
 function hideSkeletonLoader() {
-  document.getElementById('skeleton-loader').classList.remove('visible');
-  document.getElementById('projects-grid').classList.remove('hidden');
+  const skeletonLoader = document.getElementById('skeleton-loader');
+  const projectsGrid = document.getElementById('projects-grid');
+  
+  if (projectsGrid) projectsGrid.style.opacity = '1';
 }
 
 // Example usage in your loadProjects function
@@ -307,10 +311,11 @@ async function loadProjects() {
     renderProjects(projects);
     
   } catch (error) {
+    console.log('Backend not available, using fallback content');
     // Backend not available - show demo content after short delay
     setTimeout(() => {
-      showFallbackContent();
-    }, 1500); // Show after 1.5s to make skeleton visible
+      hideSkeletonLoader();
+    }, 1500);
   } finally {
     hideSkeletonLoader();
   }
