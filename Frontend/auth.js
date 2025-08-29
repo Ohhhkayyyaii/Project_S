@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = Object.fromEntries(formData.entries());
             
             // Backend API call for login
-            fetch('/api/auth/login', {
+            fetch('http://localhost:5000/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -49,10 +49,11 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(result => {
-                if (result.success) {
+                if (result.token) {
                     // Store token and redirect
                     localStorage.setItem('authToken', result.token);
-                    window.location.href = '/dashboard';
+                    localStorage.setItem('user', JSON.stringify(result));
+                    window.location.href = 'user.htm';
                 } else {
                     alert('Login failed: ' + result.message);
                 }
@@ -77,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Backend API call for signup
-            fetch('/api/auth/signup', {
+            fetch('http://localhost:5000/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -86,9 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(result => {
-                if (result.success) {
+                if (result.token) {
                     alert('Account created successfully! Please login.');
-                    window.location.href = '/login';
+                    window.location.href = 'login.htm';
                 } else {
                     alert('Signup failed: ' + result.message);
                 }

@@ -112,8 +112,25 @@ const getProjects = async (req, res) => {
     const hasNext = skip + projects.length < total;
     const hasPrev = parseInt(page) > 1;
 
-    // Return data in format frontend expects
-    res.json(projects);
+    // Return data with pagination metadata while keeping frontend compatibility
+    res.json({
+      data: projects,
+      meta: {
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total,
+          totalPages,
+          hasNext,
+          hasPrev
+        },
+        sorting: {
+          field: sort,
+          order
+        },
+        search: q || null
+      }
+    });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }

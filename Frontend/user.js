@@ -151,11 +151,20 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // API endpoints
+// CHANGED: Updated all endpoints to use full localhost:5000 URLs for backend integration
 const API_ENDPOINTS = {
-  GET_PROJECTS: '/api/projects',
-  GET_PROJECT: '/api/projects/{id}',
-  LIKE_PROJECT: '/api/projects/{id}/like',
-  VIEW_PROJECT: '/api/projects/{id}/view'
+  GET_PROJECTS: 'http://localhost:5000/api/projects',
+  GET_PROJECT: 'http://localhost:5000/api/projects/{id}',
+  LIKE_PROJECT: 'http://localhost:5000/api/projects/{id}/like',
+  VIEW_PROJECT: 'http://localhost:5000/api/projects/{id}/view'
+};
+
+// CHANGED: Added pagination and sorting parameters
+const DEFAULT_PARAMS = {
+  limit: 10,
+  page: 1,
+  sort: 'createdAt',
+  order: 'desc'
 };
 
 // Utility functions
@@ -234,11 +243,20 @@ function createProjectCard(project) {
 }
 
 // Main loadProjects function
-async function loadProjects() {
+async function loadProjects(params = {}) {
   showLoader();
   
   try {
-    const response = await fetch(API_ENDPOINTS.GET_PROJECTS, {
+    // CHANGED: Add query parameters for pagination and sorting
+    const queryParams = new URLSearchParams({
+      ...DEFAULT_PARAMS,
+      ...params
+    });
+    
+    const url = `${API_ENDPOINTS.GET_PROJECTS}?${queryParams}`;
+    console.log('Fetching projects from:', url);
+    
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -249,9 +267,19 @@ async function loadProjects() {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
-    const projects = await response.json();
-    console.log('Loaded projects:', projects);
+    const result = await response.json();
+    console.log('Loaded projects:', result);
+    
+    // CHANGED: Handle new backend response structure with { data, meta }
+    const projects = result.data || result; // Backward compatibility
+    const meta = result.meta || null;
+    
     renderProjects(projects);
+    
+    // Log pagination info if available
+    if (meta && meta.pagination) {
+      console.log('Pagination info:', meta.pagination);
+    }
     
   } catch (error) {
     console.error('Error loading projects:', error);
