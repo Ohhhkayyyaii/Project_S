@@ -322,83 +322,54 @@ async function loadProjects() {
     hideSkeletonLoader();
   }
 }
-// Add to your existing JavaScript
-// API endpoint for ratings
-API_ENDPOINTS.RATE_PROJECT = '/api/projects/{id}/rate';
-
-// Rating functionality
-document.addEventListener('click', async function(e) {
-  // Handle rating option clicks
-  if (e.target.closest('.rating-option')) {
-    const ratingOption = e.target.closest('.rating-option');
-    const ratingValue = parseInt(ratingOption.dataset.value);
-    const ratingContainer = ratingOption.closest('.rating-container');
-    const projectId = ratingContainer.dataset.projectId;
-    
-    // Visual feedback
-    document.querySelectorAll('.rating-option').forEach(opt => {
-      opt.classList.remove('selected');
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle rating clicks
+    document.addEventListener('click', function(e) {
+        // Check if a rating option was clicked
+        if (e.target.classList.contains('rating-option')) {
+            const ratingValue = e.target.dataset.value;
+            const container = e.target.closest('.rating-container');
+            const projectId = container.dataset.projectId;
+            
+            // Send rating to backend
+            fetch(`/api/projects/${projectId}/rate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ rating: ratingValue })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the displayed rating
+                container.querySelector('.rating-value').textContent = data.average_rating;
+                container.querySelector('.rating-count').textContent = `(${data.rating_count})`;
+                
+                // Highlight the selected rating
+                document.querySelectorAll('.rating-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                e.target.classList.add('selected');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        
+        // Show rating options when clicking the star area
+        if (e.target.closest('.current-rating')) {
+            const container = e.target.closest('.rating-container');
+            const popup = container.querySelector('.rating-popup');
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        }
     });
-    ratingOption.classList.add('selected');
     
-    // Send rating to backend
-    try {
-      const response = await fetch(API_ENDPOINTS.RATE_PROJECT.replace('{id}', projectId), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': 'Bearer ' + authToken
-        },
-        body: JSON.stringify({ rating: ratingValue })
-      });
-      
-      if (response.ok) {
-        const result = await response.json();
-        
-        // Update rating display
-        const ratingValueEl = ratingContainer.querySelector('.rating-value');
-        const ratingCountEl = ratingContainer.querySelector('.rating-count');
-        
-        ratingValueEl.textContent = result.average_rating;
-        ratingCountEl.textContent = `(${result.rating_count})`;
-        
-        // Show success feedback
-        ratingContainer.querySelector('.rating-icon').style.color = '#4caf50';
-        setTimeout(() => {
-          ratingContainer.querySelector('.rating-icon').style.color = '#fdbb2d';
-        }, 1000);
-      }
-    } catch (error) {
-      console.error('Error submitting rating:', error);
-      ratingOption.classList.remove('selected');
-    }
-  }
-});
-
-// Close rating popup when clicking outside
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.rating-container')) {
-    document.querySelectorAll('.rating-popup').forEach(popup => {
-      popup.style.display = 'none';
+    // Close popups when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.rating-container')) {
+            document.querySelectorAll('.rating-popup').forEach(popup => {
+                popup.style.display = 'none';
+            });
+        }
     });
-  }
 });
-
-// Initialize user's previous rating if any
-function initializeRatings() {
-  document.querySelectorAll('.rating-container').forEach(container => {
-    const projectId = container.dataset.projectId;
-    
-    // Check if user has already rated this project
-    const userRating = localStorage.getItem(`rating_${projectId}`);
-    if (userRating) {
-      const ratingOption = container.querySelector(`.rating-option[data-value="${userRating}"]`);
-      if (ratingOption) {
-        ratingOption.classList.add('selected');
-      }
-    }
-  });
-}
-
-// Call this on page load
-document.addEventListener('DOMContentLoaded', initializeRatings);

@@ -315,3 +315,54 @@ async function loadProjects() {
     hideSkeletonLoader();
   }
 }
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle rating clicks
+    document.addEventListener('click', function(e) {
+        // Check if a rating option was clicked
+        if (e.target.classList.contains('rating-option')) {
+            const ratingValue = e.target.dataset.value;
+            const container = e.target.closest('.rating-container');
+            const projectId = container.dataset.projectId;
+            
+            // Send rating to backend
+            fetch(`/api/projects/${projectId}/rate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ rating: ratingValue })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the displayed rating
+                container.querySelector('.rating-value').textContent = data.average_rating;
+                container.querySelector('.rating-count').textContent = `(${data.rating_count})`;
+                
+                // Highlight the selected rating
+                document.querySelectorAll('.rating-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                e.target.classList.add('selected');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        
+        // Show rating options when clicking the star area
+        if (e.target.closest('.current-rating')) {
+            const container = e.target.closest('.rating-container');
+            const popup = container.querySelector('.rating-popup');
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        }
+    });
+    
+    // Close popups when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.rating-container')) {
+            document.querySelectorAll('.rating-popup').forEach(popup => {
+                popup.style.display = 'none';
+            });
+        }
+    });
+});

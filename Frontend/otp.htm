@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification - Project Showcase</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="auth-nav">
+        <div class="nav-left">
+            <p>Projects</p>
+        </div>
+        <div class="nav-right">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="projects.html" class="nav-link">Projects</a>
+            <a href="contact.html" class="nav-link">Contact Us</a>
+        </div>
+    </nav>
+
+    <!-- OTP Verification Container -->
+    <div class="auth-container">
+        <div class="auth-header">
+            <h2>Verify Your Email</h2>
+            <p>Enter the 6-digit code sent to your email</p>
+        </div>
+        
+        <form class="auth-form" id="otpForm">
+            <!-- Email Display -->
+            <!-- <div class="form-group">
+                <label>Verification code sent to:</label>
+                <div class="email-display" id="userEmail">
+                    user@example.com
+                </div>
+            </div> -->
+            
+            <!-- OTP Input -->
+            <div class="form-group">
+                <label for="otp">Enter 6-digit code</label>
+                <div class="otp-input-container">
+                    <div class="otp-fields">
+                        <input type="text" class="otp-digit" maxlength="1" data-index="1" required>
+                        <input type="text" class="otp-digit" maxlength="1" data-index="2" required>
+                        <input type="text" class="otp-digit" maxlength="1" data-index="3" required>
+                        <input type="text" class="otp-digit" maxlength="1" data-index="4" required>
+                        <input type="text" class="otp-digit" maxlength="1" data-index="5" required>
+                        <input type="text" class="otp-digit" maxlength="1" data-index="6" required>
+                    </div>
+                    <button type="button" class="toggle-otp-visibility" id="toggleOtpVisibility">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <input type="hidden" id="otp" name="otp" required>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="otp-actions">
+                <button type="button" class="resend-btn" id="resendOtp">
+                    Resend Code
+                </button>
+
+                <a href="./user.htm"> <button type="submit" class="auth-btn">Verify & Continue</button></a>
+            </div>
+            
+            <div class="auth-footer">
+                <p>Didn't receive the code? <a href="#" id="resendLink">Resend</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script src="otp.js"></script>
+</body>
+</html>
