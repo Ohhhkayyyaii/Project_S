@@ -27,6 +27,15 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(hidePreloader, 4000);
   }
 });
+document.addEventListener('DOMContentLoaded', () => {
+  // Select the content element
+  const contentText = document.querySelector('.content-text');
+
+  // Add a delay of 2 seconds before making the content visible
+  setTimeout(() => {
+    contentText.classList.add('visible');
+  }, 500); // 2-second delay
+});
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -36,11 +45,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const projectHeading = document.querySelector('.project-heading');
     const explore = document.querySelector('.explore');
     const footer = document.querySelector('.footer');
+    const footercontent = document.querySelector('.footer-content');
     const toggler = document.querySelector('.toggler');
     const mainHeader = document.querySelector('.main-header');
     const showcase = document.querySelector('.showcase');
-    const cardcontent = document.querySelector('.card-content');
-    const blockbox = document.querySelector('.block-box');
+    const cardcontent = document.querySelectorAll('.card-content');
+    const blockBoxes = document.querySelectorAll('.block-box'); // Select all block-box elements
 
     // Add click event listener to the toggle button
     toggler.addEventListener('click', function () {
@@ -52,9 +62,15 @@ document.addEventListener('DOMContentLoaded', function () {
         projectHeading.classList.toggle('active');
         explore.classList.toggle('active');
         footer.classList.toggle('active');
-        cardcontent.classList.toggle('active');
-        blockbox.classList.toggle('active');
-
+        footercontent.classList.toggle('active');
+        
+        // This will toggle 'active' on each block-box when toggler is clicked
+        blockBoxes.forEach(block => {
+            block.classList.toggle('active');
+        });
+         cardcontent.forEach(content => {
+            content.classList.toggle('active');
+        });
         // Change the icon based on the state
         const icon = toggler.querySelector('i');
         if (mainHeader.classList.contains('active')) {
@@ -65,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
             icon.classList.add('fa-bars-staggered');
         }
     });
-
     // Close the sidebar when clicking outside of it on mobile
     document.addEventListener('click', function (event) {
         if (window.innerWidth <= 768 &&
@@ -79,7 +94,8 @@ document.addEventListener('DOMContentLoaded', function () {
             projectHeading.classList.remove('active');
             explore.classList.remove('active');
             footer.classList.remove('active');
-                    blockbox.classList.toggle('active');
+            footercontent.classList.remove('active');
+                    // blackbox.classList.toggle('active');
 
 
             const icon = toggler.querySelector('i');
@@ -100,6 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 projectHeading.classList.remove('active');
                 explore.classList.remove('active');
                 footer.classList.remove('active');
+                footercontent.classList.remove('active');
         cardcontent.classList.toggle('active');
 
                 const icon = toggler.querySelector('i');

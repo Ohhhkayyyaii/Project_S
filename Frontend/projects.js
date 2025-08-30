@@ -29,41 +29,44 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+//////////////////////////////////////////////////////////////////
 document.addEventListener('DOMContentLoaded', function () {
 
     // Get the toggle button and main header elements
-    const container = document.querySelector('.container');
-    const grid = document.querySelector('.grid-container');
-    const projectHeading = document.querySelector('.project-heading');
-    const explore = document.querySelector('.explore');
-    const footer = document.querySelector('.footer');
+    // const container = document.querySelector('.container');
     const toggler = document.querySelector('.toggler');
     const mainHeader = document.querySelector('.main-header');
     const showcase = document.querySelector('.showcase');
+    const grid = document.querySelector('.grid-container');
+    const projectHeading = document.querySelector('.project-heading');
+    const footer = document.querySelector('.footer');
+    const footercontent = document.querySelector('.footer-content');
+    const navitems = document.querySelectorAll('.nav-list-item');
 
-  // Add click event listener to the toggle button
-toggler.addEventListener('click', function () {
-    // Toggle the 'active' class on the main header and showcase
-    mainHeader.classList.toggle('active');
-    showcase.classList.toggle('active');
-    container.classList.toggle('active');
-    grid.classList.toggle('active');
-    projectHeading.classList.toggle('active');
-    explore.classList.toggle('active');
-    footer.classList.toggle('active');
-
-    // Change the icon based on the state
-    const icon = toggler.querySelector('i');
-    if (mainHeader.classList.contains('active')) {
-        icon.classList.remove('fa-bars-staggered');
-        icon.classList.add('fa-xmark'); 
-    } else {
-        icon.classList.remove('fa-xmark');
-        icon.classList.add('fa-bars-staggered');
-    }
-});
-
-
+    // Add click event listener to the toggle button
+    toggler.addEventListener('click', function () {
+        // Toggle the 'active' class on the main header and showcase
+        mainHeader.classList.toggle('active');
+        showcase.classList.toggle('active');
+        // container.classList.toggle('active');
+        grid.classList.toggle('active');
+        projectHeading.classList.toggle('active');
+        footer.classList.toggle('active');
+        footercontent.classList.toggle('active');
+        footercontent.classList.toggle('active');
+        navitems.classList.toggle('active');
+        
+       
+        // Change the icon based on the state
+        const icon = toggler.querySelector('i');
+        if (mainHeader.classList.contains('active')) {
+            icon.classList.remove('fa-bars-staggered');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars-staggered');
+        }
+    });
     // Close the sidebar when clicking outside of it on mobile
     document.addEventListener('click', function (event) {
         if (window.innerWidth <= 768 &&
@@ -72,11 +75,14 @@ toggler.addEventListener('click', function () {
             !toggler.contains(event.target)) {
             mainHeader.classList.remove('active');
             showcase.classList.remove('active');
-            container.classList.remove('active');
+            // container.classList.remove('active');
             grid.classList.remove('active');
             projectHeading.classList.remove('active');
-            explore.classList.remove('active');
             footer.classList.remove('active');
+            footercontent.classList.remove('active');
+            navitems.classList.remove('active');
+                    // blackbox.classList.toggle('active');
+
 
             const icon = toggler.querySelector('i');
             icon.classList.remove('fa-times');
@@ -91,11 +97,12 @@ toggler.addEventListener('click', function () {
             if (window.innerWidth <= 768) {
                 mainHeader.classList.remove('active');
                 showcase.classList.remove('active');
-                container.classList.remove('active');
+                // container.classList.remove('active');
                 grid.classList.remove('active');
                 projectHeading.classList.remove('active');
-                explore.classList.remove('active');
                 footer.classList.remove('active');
+                footercontent.classList.remove('active');
+                navitems.classList.remove('active');
 
                 const icon = toggler.querySelector('i');
                 icon.classList.remove('fa-times');
@@ -104,7 +111,8 @@ toggler.addEventListener('click', function () {
         });
     });
 });
-// API endpoints (backend should provide these)
+
+//API endpoints
 const API_ENDPOINTS = {
   LIKE_PROJECT: '/api/projects/{id}/like',
   VIEW_PROJECT: '/api/projects/{id}/view',
