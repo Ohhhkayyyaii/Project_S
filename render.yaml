@@ -4,8 +4,8 @@ services:
     name: project-showcase-backend
     env: node
     plan: free
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && npm start
+    buildCommand: npm run install-deps
+    startCommand: npm start
     envVars:
       - key: MONGO_URI
         value: mongodb+srv://tinsukia579_db_user:vesgdMiZ0qaqO983@clusterp.bdmursy.mongodb.net/?retryWrites=true&w=majority&appName=ClusterP
