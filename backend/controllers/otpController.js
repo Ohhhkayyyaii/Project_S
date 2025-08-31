@@ -51,10 +51,15 @@ const sendOTP = async (req, res) => {
 
     if (!emailResult.success) {
       await OTP.deleteOne({ _id: otpDoc._id });
-      return res.status(500).json({ message: 'Failed to send OTP email' });
+      return res.status(500).json({ 
+        success: false,
+        message: 'Failed to send OTP email',
+        error: emailResult.error 
+      });
     }
 
     res.json({
+      success: true,
       message: `OTP sent to ${email}`,
       purpose: purpose
     });

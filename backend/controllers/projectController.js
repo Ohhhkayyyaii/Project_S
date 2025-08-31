@@ -1,6 +1,6 @@
 const Project = require('../models/Project');
 const hashIp = require('../utils/hashIp');
-
+const { sendMail } = require('../utils/mailer');
 // @desc    Create a project
 // @route   POST /api/projects
 // @access  Private
@@ -16,6 +16,16 @@ const createProject = async (req, res) => {
       links,
       owner: req.user._id
     });
+
+    // Send email to project owner
+    if (req.user.email) {
+      await sendMail({
+        to: req.user.email,
+        subject: 'Project Created Successfully',
+        text: `Hi ${req.user.name}, your project "${project.title}" has been created.`,
+        html: `<p>Hi ${req.user.name}, your project "<b>${project.title}</b>" has been created.</p>`
+      });
+    }
 
     res.status(201).json(project);
   } catch (error) {
@@ -116,19 +126,9 @@ const getProjects = async (req, res) => {
     res.json({
       data: projects,
       meta: {
-        pagination: {
-          page: parseInt(page),
-          limit: parseInt(limit),
-          total,
-          totalPages,
-          hasNext,
-          hasPrev
-        },
-        sorting: {
-          field: sort,
-          order
-        },
-        search: q || null
+        page,
+        limit,
+        total
       }
     });
   } catch (error) {
@@ -141,8 +141,7 @@ const getProjects = async (req, res) => {
 // @access  Public
 const getProject = async (req, res) => {
   try {
-    const project = await Project.findById(req.params.id)
-      .populate('owner', 'name email');
+    const project = await Project.findById(req.params.id).populate('owner', '_id name');
 
     if (!project) {
       return res.status(404).json({ message: 'Project not found' });
@@ -152,9 +151,12 @@ const getProject = async (req, res) => {
     const avgRating = project.ratingCount > 0 ? (project.ratingSum / project.ratingCount).toFixed(1) : 0;
     
     // Return consistent structure
-    res.json({
-      ...project.toJSON(),
-      avgRating: parseFloat(avgRating)
+    res.status(200).json({
+      ...project.toObject(),
+      owner: {
+        _id: project.owner._id,
+        name: project.owner.name
+      }
     });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });

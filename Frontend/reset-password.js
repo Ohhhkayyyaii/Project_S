@@ -1,64 +1,116 @@
-document.getElementById('resetPasswordForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
+document.addEventListener('DOMContentLoaded', function() {
+    const API_BASE_URL = 'http://localhost:5000/api';
     
-    const submitBtn = document.getElementById('submitBtn');
-    const messageDiv = document.getElementById('message');
-    const newPassword = document.getElementById('newPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
+    document.getElementById('resetPasswordForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        const submitBtn = document.getElementById('submitBtn');
+        const messageDiv = document.getElementById('message');
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
 
-    // Client-side check
-    if (newPassword !== confirmPassword) {
-        messageDiv.textContent = 'Passwords do not match.';
-        messageDiv.className = 'error';
-        return;
-    }
-
-    submitBtn.textContent = 'Resetting...';
-    submitBtn.disabled = true;
-    messageDiv.textContent = '';
-
-    // Get the token from the URL (passed from enter-otp.html)
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-
-    // If there's no token, redirect back to login
-    if (!token) {
-        alert('Invalid reset link. Please start the process again.');
-        window.location.href = 'login.html';
-        return;
-    }
-
-    try {
-        // 3. CALL THIS API TO FINALLY RESET THE PASSWORD
-        const response = await fetch('https://your-backend.com/api/auth/reset-password', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Send the token to prove identity
-            },
-            body: JSON.stringify({
-                newPassword: newPassword
-            })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            messageDiv.textContent = 'Password reset successfully! Redirecting to login...';
-            messageDiv.className = 'success';
-            setTimeout(() => {
-                window.location.href = 'login.html?message=Password+reset+successfully';
-            }, 2000);
-        } else {
-            messageDiv.textContent = data.message || 'Error resetting password.';
+        // Client-side validation
+        if (newPassword.length < 6) {
+            messageDiv.textContent = 'Password must be at least 6 characters long.';
             messageDiv.className = 'error';
+            return;
         }
 
-    } catch (error) {
-        messageDiv.textContent = 'Network error. Please try again.';
-        messageDiv.className = 'error';
-    } finally {
-        submitBtn.textContent = 'Reset Password';
-        submitBtn.disabled = false;
-    }
+        if (newPassword !== confirmPassword) {
+            messageDiv.textContent = 'Passwords do not match.';
+            messageDiv.className = 'error';
+            return;
+        }
+
+        // Get email from localStorage
+        const email = localStorage.getItem('resetEmail');
+        if (!email) {
+            messageDiv.textContent = 'Session expired. Please start the reset process again.';
+            messageDiv.className = 'error';
+            return;
+        }
+
+        submitBtn.textContent = 'Resetting...';
+        submitBtn.disabled = true;
+        messageDiv.textContent = '';
+        messageDiv.className = '';
+
+        try {
+            // Reset password using email (since OTP was already verified)
+            const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    newPassword: newPassword
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                messageDiv.textContent = 'Password reset successfully! Redirecting to login...';
+                messageDiv.className = 'success';
+                
+                // Clear stored email
+                localStorage.removeItem('resetEmail');
+                
+                setTimeout(() => {
+                    window.location.href = 'login.htm';
+                }, 2000);
+            } else {
+                messageDiv.textContent = data.message || 'Error resetting password. Please try again.';
+                messageDiv.className = 'error';
+            }
+
+        } catch (error) {
+            console.error('Error:', error);
+            messageDiv.textContent = 'Network error. Please try again.';
+            messageDiv.className = 'error';
+        } finally {
+            submitBtn.textContent = 'Reset Password';
+            submitBtn.disabled = false;
+        }
+    });
+    
+    // Add CSS for message styling
+    const style = document.createElement('style');
+    style.textContent = `
+        #message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        #message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        #message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .auth-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .auth-links a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+    `;
+    document.head.appendChild(style);
 });

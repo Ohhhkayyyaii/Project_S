@@ -20,24 +20,12 @@ const register = async (req, res) => {
       return res.status(400).json({ message: 'User with this email already exists' });
     }
 
-    // Require a recently verified OTP before allowing registration
-    const recentVerifiedOtp = await OTP.findOne({
-      email: email.toLowerCase(),
-      purpose: 'email_verification',
-      isUsed: true,
-      updatedAt: { $gt: new Date(Date.now() - 10 * 60 * 1000) } // used within last 10 minutes
-    });
-
-    if (!recentVerifiedOtp) {
-      return res.status(400).json({ message: 'Please verify your email with OTP before signing up' });
-    }
-
-    // Create user and mark as verified
+    // Create user directly (no OTP verification required)
     const user = await User.create({
       name,
       email,
       password,
-      isEmailVerified: true
+      isEmailVerified: true // Mark as verified by default
     });
 
     if (user) {

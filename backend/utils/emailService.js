@@ -1,14 +1,12 @@
 const nodemailer = require('nodemailer');
 
-// Create transporter for Brevo
+// Create transporter for Gmail SMTP
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: 'smtp-relay.brevo.com',
-    port: 587,
-    secure: false,
+    service: 'gmail',
     auth: {
-      user: process.env.SENDER_EMAIL,
-      pass: process.env.BREVO_API_KEY
+      user: 'your-gmail@gmail.com', // Replace with your Gmail
+      pass: 'your-app-password'     // Replace with your Gmail app password
     }
   });
 };
@@ -61,18 +59,18 @@ const sendOTPEmail = async (email, otp, purpose = 'email_verification') => {
     `;
 
     const mailOptions = {
-      from: `"${process.env.SENDER_NAME}" <${process.env.SENDER_EMAIL}>`,
+      from: '"Project Showcase" <your-gmail@gmail.com>',
       to: email,
       subject: subject,
       html: htmlContent
     };
 
     const result = await transporter.sendMail(mailOptions);
-    console.log('OTP email sent successfully:', result.messageId);
+    console.log('✅ OTP email sent successfully:', result.messageId);
     return { success: true, messageId: result.messageId };
     
   } catch (error) {
-    console.error('Error sending OTP email:', error);
+    console.error('❌ Error sending OTP email:', error);
     return { success: false, error: error.message };
   }
 };

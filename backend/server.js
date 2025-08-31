@@ -18,9 +18,9 @@ mongoose.connect(process.env.MONGO_URI)
 // Security middleware
 app.use(helmet());
 
-// CORS configuration - restrict to CORS_ORIGIN
+// CORS configuration - allow localhost:5500 for frontend
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim()) : ['http://localhost:3000'],
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim()) : ['http://localhost:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'],
   credentials: true,
   optionsSuccessStatus: 200
 };
