@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const OTP = require('../models/OTP');
 const jwt = require('jsonwebtoken');
 
 // Generate JWT Token
@@ -16,14 +17,27 @@ const register = async (req, res) => {
     // Check if user already exists
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: 'User with this email already exists' });
     }
 
-    // Create user
+    // Require a recently verified OTP before allowing registration
+    const recentVerifiedOtp = await OTP.findOne({
+      email: email.toLowerCase(),
+      purpose: 'email_verification',
+      isUsed: true,
+      updatedAt: { $gt: new Date(Date.now() - 10 * 60 * 1000) } // used within last 10 minutes
+    });
+
+    if (!recentVerifiedOtp) {
+      return res.status(400).json({ message: 'Please verify your email with OTP before signing up' });
+    }
+
+    // Create user and mark as verified
     const user = await User.create({
       name,
       email,
-      password
+      password,
+      isEmailVerified: true
     });
 
     if (user) {
@@ -50,13 +64,17 @@ const login = async (req, res) => {
     // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     // Check password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    if (!user.isEmailVerified) {
+      return res.status(403).json({ message: 'Please verify your email before logging in' });
     }
 
     const token = generateToken(user._id);

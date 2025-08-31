@@ -19,7 +19,7 @@ const createProject = async (req, res) => {
 
     res.status(201).json(project);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -39,76 +39,100 @@ const getProjects = async (req, res) => {
       ];
     }
 
-    // Build sort object
-    let sortObj = {};
-    if (sort === 'avg') {
-      sortObj = { $expr: { $divide: ['$ratingSum', { $max: ['$ratingCount', 1] }] } };
-    } else {
-      sortObj[sort] = order === 'desc' ? -1 : 1;
-    }
-
     // Calculate skip value for pagination
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    // Execute query with pagination
-    let projectsQuery = Project.find(query)
-      .populate('owner', 'name email')
-      .sort(sortObj)
-      .skip(skip)
-      .limit(parseInt(limit));
-
-    // If sorting by average rating, we need to handle it differently
-    if (sort === 'avg') {
-      projectsQuery = Project.aggregate([
-        { $match: query },
-        {
-          $addFields: {
-            avgRating: {
-              $cond: {
-                if: { $gt: ['$ratingCount', 0] },
-                then: { $divide: ['$ratingSum', '$ratingCount'] },
-                else: 0
-              }
+    // Use aggregation for consistent structure and proper average sorting
+    const aggregationPipeline = [
+      { $match: query },
+      {
+        $addFields: {
+          avgRating: {
+            $cond: {
+              if: { $gt: ['$ratingCount', 0] },
+              then: { $divide: ['$ratingSum', '$ratingCount'] },
+              else: 0
             }
           }
-        },
-        { $sort: { avgRating: order === 'desc' ? -1 : 1 } },
-        { $skip: skip },
-        { $limit: parseInt(limit) },
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'owner',
-            foreignField: '_id',
-            as: 'owner'
-          }
-        },
-        { $unwind: '$owner' },
-        {
-          $project: {
-            name: '$owner.name',
-            email: '$owner.email'
-          }
         }
-      ]);
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'owner',
+          foreignField: '_id',
+          as: 'owner'
+        }
+      },
+      { $unwind: '$owner' },
+      {
+        $project: {
+          id: '$_id',
+          title: 1,
+          description: 1,
+          imageUrl: 1,
+          techStack: 1,
+          links: 1,
+          ratingCount: 1,
+          ratingSum: 1,
+          avgRating: 1,
+          voterUserIds: 1,
+          voterIpHashes: 1,
+          userRatings: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          author_name: '$owner.name',
+          likes_count: { $ifNull: ['$likes_count', 0] },
+          views_count: { $ifNull: ['$views_count', 0] }
+        }
+      }
+    ];
+
+    // Add sorting
+    if (sort === 'avgRating') {
+      aggregationPipeline.push({ $sort: { avgRating: order === 'desc' ? -1 : 1 } });
+    } else {
+      aggregationPipeline.push({ $sort: { [sort]: order === 'desc' ? -1 : 1 } });
     }
 
-    const projects = await projectsQuery;
+    // Add pagination
+    aggregationPipeline.push(
+      { $skip: skip },
+      { $limit: parseInt(limit) }
+    );
+
+    // Execute aggregation
+    const projects = await Project.aggregate(aggregationPipeline);
 
     // Get total count for pagination
     const total = await Project.countDocuments(query);
 
+    // Calculate pagination metadata
+    const totalPages = Math.ceil(total / parseInt(limit));
+    const hasNext = skip + projects.length < total;
+    const hasPrev = parseInt(page) > 1;
+
+    // Return data with pagination metadata while keeping frontend compatibility
     res.json({
-      projects,
-      pagination: {
-        current: parseInt(page),
-        total: Math.ceil(total / parseInt(limit)),
-        hasNext: skip + projects.length < total,
-        hasPrev: parseInt(page) > 1
+      data: projects,
+      meta: {
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+          total,
+          totalPages,
+          hasNext,
+          hasPrev
+        },
+        sorting: {
+          field: sort,
+          order
+        },
+        search: q || null
       }
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -124,7 +148,14 @@ const getProject = async (req, res) => {
       return res.status(404).json({ message: 'Project not found' });
     }
 
-    res.json(project);
+    // Add computed average rating
+    const avgRating = project.ratingCount > 0 ? (project.ratingSum / project.ratingCount).toFixed(1) : 0;
+    
+    // Return consistent structure
+    res.json({
+      ...project.toJSON(),
+      avgRating: parseFloat(avgRating)
+    });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
@@ -193,7 +224,7 @@ const rateProject = async (req, res) => {
     
     // Validate score
     if (!score || score < 1 || score > 10) {
-      return res.status(400).json({ message: 'Score must be between 1 and 10' });
+      return res.status(400).json({ error: 'Score must be between 1 and 10' });
     }
 
     const project = await Project.findById(req.params.id);
@@ -230,7 +261,7 @@ const rateProject = async (req, res) => {
       const ipHash = hashIp(req.ip);
       
       if (project.voterIpHashes.includes(ipHash)) {
-        return res.status(400).json({ message: 'Guest users can only rate once per project' });
+        return res.status(400).json({ error: 'Guest users can only rate once per project' });
       }
 
       project.voterIpHashes.push(ipHash);
@@ -242,10 +273,10 @@ const rateProject = async (req, res) => {
 
     await project.save();
 
-    const average = project.ratingCount > 0 ? (project.ratingSum / project.ratingCount).toFixed(1) : 0;
+    const avgRating = project.ratingCount > 0 ? (project.ratingSum / project.ratingCount).toFixed(1) : 0;
 
     res.json({
-      average: parseFloat(average),
+      avgRating: parseFloat(avgRating),
       count: project.ratingCount,
       myScore
     });

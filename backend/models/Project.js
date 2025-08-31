@@ -69,4 +69,10 @@ projectSchema.virtual('avgRating').get(function() {
 // Ensure virtual fields are serialized
 projectSchema.set('toJSON', { virtuals: true });
 
+// Database indexes for performance
+projectSchema.index({ createdAt: -1 }); // For sorting by date
+projectSchema.index({ ratingCount: -1, ratingSum: -1 }); // For rating-based sorting
+projectSchema.index({ owner: 1 }); // For user's projects
+projectSchema.index({ title: 'text', description: 'text' }); // For text search
+
 module.exports = mongoose.model('Project', projectSchema);

@@ -277,14 +277,18 @@ document.addEventListener('DOMContentLoaded', loadProjects);
 
 // Show skeleton loader
 function showSkeletonLoader() {
-  document.getElementById('skeleton-loader').classList.add('visible');
-  document.getElementById('projects-grid').classList.add('hidden');
+  const skeletonLoader = document.getElementById('skeleton-loader');
+  const projectsGrid = document.getElementById('projects-grid');
+  
+  if (projectsGrid) projectsGrid.style.opacity = '0.5';
 }
 
 // Hide skeleton loader
 function hideSkeletonLoader() {
-  document.getElementById('skeleton-loader').classList.remove('visible');
-  document.getElementById('projects-grid').classList.remove('hidden');
+  const skeletonLoader = document.getElementById('skeleton-loader');
+  const projectsGrid = document.getElementById('projects-grid');
+  
+  if (projectsGrid) projectsGrid.style.opacity = '1';
 }
 
 // Example usage in your loadProjects function
@@ -331,10 +335,11 @@ async function loadProjects() {
     renderProjects(projects);
     
   } catch (error) {
+    console.log('Backend not available, using fallback content');
     // Backend not available - show demo content after short delay
     setTimeout(() => {
-      showFallbackContent();
-    }, 1500); // Show after 1.5s to make skeleton visible
+      hideSkeletonLoader();
+    }, 1500);
   } finally {
     hideSkeletonLoader();
   }
@@ -389,4 +394,69 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+<<<<<<< HEAD
+=======
+  }
+});
+
+// Initialize user's previous rating if any
+function initializeRatings() {
+  document.querySelectorAll('.rating-container').forEach(container => {
+    const projectId = container.dataset.projectId;
+    
+    // Check if user has already rated this project
+    const userRating = localStorage.getItem(`rating_${projectId}`);
+    if (userRating) {
+      const ratingOption = container.querySelector(`.rating-option[data-value="${userRating}"]`);
+      if (ratingOption) {
+        ratingOption.classList.add('selected');
+      }
+    }
+  });
+}
+
+// Call this on page load
+document.addEventListener('DOMContentLoaded', initializeRatings);
+
+// Add event listeners for login and create account buttons
+document.addEventListener('DOMContentLoaded', function() {
+  // Login button
+  const loginBtn = document.querySelector('.login');
+  if (loginBtn) {
+    loginBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('Login button clicked');
+      window.location.href = './login.htm';
+    });
+  } else {
+    console.log('Login button not found');
+  }
+
+  // Create account button
+  const createAccountBtn = document.querySelector('.create-account');
+  if (createAccountBtn) {
+    createAccountBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('Create account button clicked');
+      window.location.href = './signup.htm';
+    });
+  } else {
+    console.log('Create account button not found');
+  }
+});
+
+// Alternative approach - use event delegation
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('login')) {
+    e.preventDefault();
+    console.log('Login button clicked (delegation)');
+    window.location.href = './login.htm';
+  }
+  
+  if (e.target.classList.contains('create-account')) {
+    e.preventDefault();
+    console.log('Create account button clicked (delegation)');
+    window.location.href = './signup.htm';
+  }
+>>>>>>> 32bfa8389976ddaea10770b7053f4fb642773d64
 });
