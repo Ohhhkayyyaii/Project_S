@@ -4,9 +4,8 @@ services:
     name: project-showcase-backend
     env: node
     plan: free
-    rootDir: backend
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
     envVars:
       - key: MONGO_URI
         value: mongodb+srv://tinsukia579_db_user:vesgdMiZ0qaqO983@clusterp.bdmursy.mongodb.net/?retryWrites=true&w=majority&appName=ClusterP
@@ -22,9 +21,8 @@ services:
     name: project-showcase-frontend
     env: static
     plan: free
-    rootDir: Frontend
     buildCommand: null
-    staticPublishPath: .
+    staticPublishPath: ./Frontend
     envVars:
       - key: API_URL
         value: https://project-showcase-backend.onrender.com
