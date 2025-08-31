@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // API Configuration
-    const API_BASE_URL = 'http://localhost:5000/api';
+    // API Configuration - Updated for production
+    const API_BASE_URL = 'https://project-showcase-backend-tynn.onrender.com/api';
     
     // Password strength indicator
     const passwordInput = document.getElementById('signup-password');
