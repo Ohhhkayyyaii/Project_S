@@ -18,9 +18,11 @@ mongoose.connect(process.env.MONGO_URI)
 // Security middleware
 app.use(helmet());
 
-// CORS configuration - allow localhost:5500 for frontend
+// CORS configuration - allow all origins for production
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim()) : ['http://localhost:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'],
+  origin: process.env.CORS_ORIGIN ? 
+    process.env.CORS_ORIGIN.split(',').map(origin => origin.trim()) : 
+    ['http://localhost:3000', 'http://localhost:5500', 'http://127.0.0.1:5500', '*'],
   credentials: true,
   optionsSuccessStatus: 200
 };
@@ -35,12 +37,17 @@ app.use('/api', routes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-  res.json({ ok: true });
+  res.json({ ok: true, message: 'Server is running!' });
 });
 
 // Test endpoint that frontend is trying to access
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend is working!' });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ message: 'Project Showcase API is running!' });
 });
 
 // Error handling middleware (must be last)

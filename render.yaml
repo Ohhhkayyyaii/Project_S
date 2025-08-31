@@ -1,0 +1,30 @@
+services:
+  # Backend API Service
+  - type: web
+    name: project-showcase-backend
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGO_URI
+        value: mongodb+srv://tinsukia579_db_user:vesgdMiZ0qaqO983@clusterp.bdmursy.mongodb.net/?retryWrites=true&w=majority&appName=ClusterP
+      - key: JWT_SECRET
+        value: your-super-secret-jwt-key-change-this-in-production
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+
+  # Frontend Static Site
+  - type: web
+    name: project-showcase-frontend
+    env: static
+    plan: free
+    rootDir: Frontend
+    buildCommand: null
+    staticPublishPath: .
+    envVars:
+      - key: API_URL
+        value: https://project-showcase-backend.onrender.com
